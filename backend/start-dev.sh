@@ -1,0 +1,1 @@
+export FLASK_APP=src/app && export FLASK_ENV=development && flask run -p 3000 --host=0.0.0.0
