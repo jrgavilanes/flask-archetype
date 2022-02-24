@@ -2,3 +2,4 @@ backend/.idea/
 backend/venv/
 backend/postgres_data/
 *.pyc
+.vscode/
