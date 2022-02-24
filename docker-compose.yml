@@ -1,0 +1,50 @@
+version: '3.3'
+
+services:
+    db:
+        image: postgres:11
+        volumes:
+            - ./backend/postgres_data:/var/lib/postgresql/data/
+        environment:     
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=janrax_db
+            - TZ=Europe/Madrid
+            - PGTZ=Europe/Madrid
+        ports:
+            - 5432:5432
+    backend:
+        build: ./backend/        
+        command: gunicorn wsgi:app --bind 0.0.0.0:8000
+        volumes:
+            - ./backend/src:/app
+        ports:
+            - 8000:8000
+        expose:
+            - 8000
+        depends_on:
+            - db
+
+    frontend:
+        build: ./frontend/
+        volumes:
+            - ./frontend/src:/app/
+        ports:
+            - 80:80
+        depends_on: 
+            - backend
+
+    pgadmin:
+        image: dpage/pgadmin4:5.5
+        depends_on: 
+            - db
+        ports:
+            - 8080:80        
+        environment: 
+            PGADMIN_DEFAULT_EMAIL: "postgres@postgres.com"            
+            PGADMIN_DEFAULT_PASSWORD: "postgres"
+        
+    
+
+volumes:
+    postgres_data:
