@@ -9,3 +9,7 @@
 ## Arrancar entorno de desarrollo
 
     sh start-dev.sh
+
+## Comando ejecutar tests
+
+    python -m unittest
