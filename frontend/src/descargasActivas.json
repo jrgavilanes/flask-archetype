@@ -121,7 +121,7 @@
                 "cod_pedido": "P0005",
                 "lineas": [
                     {
-                        "articulo": "00003",
+                        "articulo": "00001",
                         "varlog": "0",
                         "denominacion": "articulo 3",
                         "formato": "C01",

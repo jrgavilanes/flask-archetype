@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RECEPCIÓN</title>
+    <link rel="icon" href="favicon.ico" sizes="32x32" type="image/vnd.microsoft.icon">
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
 
@@ -275,7 +276,7 @@
                                                             <tbody>
                                                                 <tr
                                                                     v-for="line of getLineasPedidosDescarga(descarga.descarga) ">
-                                                                    <th scope="col">
+                                                                    <th scope="col" class="m-3">
                                                                         <a title="Crear paleta" type="button"
                                                                             :href=`identifica_paleta.html?id=${line.descarga}-${line.pedido}-${line.articulo}-${line.varlog}-${descarga.muelle}-${descarga.matricula}`
                                                                             class="btn btn-outline-warning"><svg
@@ -288,7 +289,8 @@
                                                                                     d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z" />
                                                                             </svg>
                                                                         </a>
-                                                                        {{line.descarga}}-{{line.pedido}}-{{line.articulo}}
+                                                                        <!-- {{line.descarga}}-{{line.pedido}}-{{line.articulo}} -->
+                                                                        {{line.articulo}}
                                                                     </th>
                                                                     <th scope="col">{{line.varlog}}</th>
                                                                     <th scope="col">{{line.cantidadRecepcionada}}</th>
@@ -771,9 +773,21 @@
                 },
                 mounted() {
                     this.loadDescargasActivas()
-
+                    this.leeREST();
                 },
                 methods: {
+                    async leeREST(){
+                        let response = await fetch('http://localhost/api/datos', {
+                            method: 'GET',
+                            headers: new Headers({
+                                'Content-Type': 'application/json',
+                                'Access-Control-Allow-Origin': '*',
+                                'Access-Control-Allow-Methods': 'GET',
+                            }),
+                        });
+                        response = await response.json();
+                        console.log("llega", response)
+                    },
                     valida_usuario() {
                         if (this.usuario === this.password) {
                             this.mensaje_error = ""
@@ -857,10 +871,10 @@
                         return result
                     },
                     loadDescargasActivas() {
-                        fetch('api/datos')
+                        fetch('http://localhost/api/datos')
                             .then(response => response.json())
                             .then(data => {
-                                console.log("recibo", data)
+                                // console.log("recibo", data)
                                 this.descargasActivasCacheada = data
                                 // this.descargasActivas = data.slice()
                                 this.getDistinctCombosValues()
